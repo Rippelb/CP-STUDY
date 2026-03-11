@@ -1,0 +1,269 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  image         String?
+  password      String?
+  xp            Int       @default(0)
+  level         Int       @default(1)
+  streak        Int       @default(0)
+  bestStreak    Int       @default(0)
+  lastStudyDate DateTime?
+  streakShields Int       @default(0)
+  targetExam    String    @default("ENEM")
+  examDate      DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts        Account[]
+  sessions        Session[]
+  answers         Answer[]
+  scheduleBlocks  ScheduleBlock[]
+  achievements    UserAchievement[]
+  subjectProgress SubjectProgress[]
+  dailyQuests     UserDailyQuest[]
+  studySessions   StudySession[]
+}
+
+model Subject {
+  id    String @id @default(cuid())
+  name  String
+  slug  String @unique
+  color String
+  icon  String
+  area  String // "humanas", "linguagens", "natureza", "matematica"
+  order Int    @default(0)
+
+  topics          Topic[]
+  questions       Question[]
+  subjectProgress SubjectProgress[]
+  scheduleBlocks  ScheduleBlock[]
+}
+
+model Topic {
+  id          String @id @default(cuid())
+  name        String
+  slug        String
+  description String @default("")
+  order       Int    @default(0)
+  subjectId   String
+
+  subject   Subject    @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subtopics Subtopic[]
+  questions Question[]
+  videoLinks VideoLink[]
+  scheduleBlocks ScheduleBlock[]
+
+  @@unique([subjectId, slug])
+}
+
+model Subtopic {
+  id       String @id @default(cuid())
+  name     String
+  slug     String
+  order    Int    @default(0)
+  topicId  String
+
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@unique([topicId, slug])
+}
+
+model Question {
+  id         String @id @default(cuid())
+  content    String @db.Text
+  imageUrl   String?
+  source     String // "ENEM", "UFRGS", "FUVEST", "UNICAMP", "ORIGINAL"
+  year       Int
+  difficulty String // "easy", "medium", "hard"
+  topicId    String
+  subjectId  String
+
+  topic   Topic   @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  options Option[]
+  answers Answer[]
+
+  createdAt DateTime @default(now())
+}
+
+model Option {
+  id          String  @id @default(cuid())
+  letter      String  // A, B, C, D, E
+  content     String  @db.Text
+  isCorrect   Boolean @default(false)
+  explanation String? @db.Text
+  questionId  String
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  answers  Answer[]
+}
+
+model Answer {
+  id         String   @id @default(cuid())
+  userId     String
+  questionId String
+  optionId   String
+  isCorrect  Boolean
+  xpEarned   Int      @default(0)
+  timeSpent  Int?     // seconds
+  combo      Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  option   Option   @relation(fields: [optionId], references: [id], onDelete: Cascade)
+}
+
+model VideoLink {
+  id       String  @id @default(cuid())
+  title    String
+  url      String
+  channel  String
+  duration String
+  topicId  String
+  watched  Boolean @default(false)
+  order    Int     @default(0)
+
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+}
+
+model Achievement {
+  id          String @id @default(cuid())
+  name        String
+  description String
+  icon        String
+  xpReward    Int    @default(0)
+  condition   String // JSON describing unlock condition
+  category    String // "study", "streak", "mastery", "social", "special"
+  rarity      String @default("common") // "common", "rare", "epic", "legendary"
+
+  userAchievements UserAchievement[]
+}
+
+model UserAchievement {
+  id            String   @id @default(cuid())
+  userId        String
+  achievementId String
+  unlockedAt    DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+}
+
+model SubjectProgress {
+  id         String @id @default(cuid())
+  userId     String
+  subjectId  String
+  mastery    Float  @default(0) // 0 to 100
+  totalAnswered Int @default(0)
+  totalCorrect  Int @default(0)
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, subjectId])
+}
+
+model ScheduleBlock {
+  id        String   @id @default(cuid())
+  userId    String
+  subjectId String
+  topicId   String?
+  title     String   @default("")
+  date      DateTime
+  startTime String   // "08:00"
+  endTime   String   // "09:30"
+  duration  Int      // minutes
+  completed Boolean  @default(false)
+  color     String   @default("#6C63FF")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  topic   Topic?  @relation(fields: [topicId], references: [id], onDelete: SetNull)
+}
+
+model DailyQuest {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  type        String // "answer_questions", "study_time", "streak", "subject_specific"
+  target      Int    // number to reach
+  xpReward    Int
+  date        DateTime @db.Date
+
+  userQuests UserDailyQuest[]
+
+  @@unique([title, date])
+}
+
+model UserDailyQuest {
+  id          String  @id @default(cuid())
+  userId      String
+  questId     String
+  progress    Int     @default(0)
+  completed   Boolean @default(false)
+  completedAt DateTime?
+
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quest DailyQuest @relation(fields: [questId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questId])
+}
+
+model StudySession {
+  id        String   @id @default(cuid())
+  userId    String
+  duration  Int      // minutes
+  date      DateTime @default(now())
+  type      String   // "practice", "review", "marathon", "simulado"
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

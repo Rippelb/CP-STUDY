@@ -1,36 +1,127 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# StudyOS — Plataforma de Estudos para UFRGS/ENEM
 
-## Getting Started
+Plataforma gamificada de estudos construída com Next.js 14, TypeScript e design sci-fi dark mode. Sistema completo com questões de vestibulares, XP, conquistas, cronogramas e videoaulas.
 
-First, run the development server:
+## Stack Técnica
+
+- **Framework**: Next.js 14 (App Router) + TypeScript
+- **Autenticação**: NextAuth.js v5 (Google OAuth + Email/Senha)
+- **Banco de Dados**: Supabase (PostgreSQL) + Prisma ORM
+- **Estilização**: Tailwind CSS + Framer Motion
+- **Estado Global**: Zustand
+- **Gráficos**: Recharts
+- **Fontes**: Syne (display) + DM Sans (body) + JetBrains Mono (código)
+- **Deploy**: Vercel
+
+## Funcionalidades
+
+- Landing page com animações e partículas
+- Dashboard com stats, gráfico radar e questão do dia
+- 12 matérias com tópicos, subtópicos e progresso
+- Sistema de questões com 4 modos (Livre, Simulado, Revisão, Maratona)
+- XP, níveis (Calouro → Lenda), combo e streak
+- 30+ conquistas com raridades (Comum → Lendário)
+- Cronograma semanal interativo com heatmap
+- Leaderboard com pódio animado
+- Perfil com estatísticas completas
+- Videoaulas do YouTube organizadas por tópico
+- Design dark mode com glassmorphism e glow effects
+
+## Setup Local
+
+### Pré-requisitos
+- Node.js 18+
+- PostgreSQL (ou conta Supabase)
+
+### Instalação
 
 ```bash
+# Clonar e instalar
+git clone <repo-url>
+cd plataforma-estudos
+npm install
+
+# Configurar variáveis de ambiente
+cp .env.example .env
+# Editar .env com suas credenciais
+
+# Gerar Prisma Client
+npx prisma generate
+
+# Criar tabelas (com banco configurado)
+npx prisma db push
+
+# Rodar em desenvolvimento
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Variáveis de Ambiente
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variável | Descrição |
+|----------|-----------|
+| `DATABASE_URL` | URL de conexão PostgreSQL (Supabase) |
+| `DIRECT_URL` | URL direta do PostgreSQL |
+| `NEXTAUTH_SECRET` | Secret para NextAuth (gerar com `openssl rand -base64 32`) |
+| `NEXTAUTH_URL` | URL da aplicação (`http://localhost:3000`) |
+| `GOOGLE_CLIENT_ID` | Client ID do Google OAuth |
+| `GOOGLE_CLIENT_SECRET` | Client Secret do Google OAuth |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Estrutura do Projeto
 
-## Learn More
+```
+src/
+├── app/
+│   ├── (auth)/          # Login e registro
+│   ├── (dashboard)/     # Área logada
+│   │   ├── dashboard/   # Painel principal
+│   │   ├── subjects/    # Matérias e tópicos
+│   │   ├── practice/    # Sistema de questões
+│   │   ├── schedule/    # Cronograma
+│   │   ├── achievements/# Conquistas
+│   │   ├── leaderboard/ # Ranking
+│   │   └── profile/     # Perfil
+│   ├── api/             # API routes
+│   └── page.tsx         # Landing page
+├── components/
+│   ├── ui/              # Glass cards, buttons, progress bars
+│   ├── layout/          # Sidebar, header, particles
+│   └── ...
+├── lib/                 # Prisma, auth, utils, constants, seed
+├── hooks/               # useXP, useStreak, useProgress
+└── stores/              # Zustand stores
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Matérias Disponíveis
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Área | Matérias |
+|------|----------|
+| Matemática | Matemática |
+| Ciências da Natureza | Física, Química, Biologia |
+| Linguagens | Português, Redação, Inglês |
+| Ciências Humanas | História, Geografia, Filosofia, Sociologia |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Sistema de Gamificação
 
-## Deploy on Vercel
+- **XP**: Fácil +10, Médio +20, Difícil +35
+- **Combo**: x1.5 (3+), x2 (5+), x3 (10+)
+- **Níveis**: Calouro → Estudante → Dedicado → ... → Gênio → Lenda
+- **Streak**: Dias consecutivos com bônus de 50%+ XP após 3 dias
+- **30+ Conquistas**: De "Primeira Questão" a "Mestre Supremo"
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deploy na Vercel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Push do código para GitHub
+2. Importar projeto na Vercel
+3. Configurar variáveis de ambiente
+4. Deploy automático
+
+O arquivo `vercel.json` já está configurado.
+
+## Scripts
+
+```bash
+npm run dev      # Servidor de desenvolvimento
+npm run build    # Build de produção
+npm run start    # Servidor de produção
+npm run lint     # Linting
+```
