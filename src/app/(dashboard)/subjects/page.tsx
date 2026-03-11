@@ -49,32 +49,32 @@ const areas: Area[] = [
   {
     name: "Ciências Humanas",
     subjects: [
-      { name: "História", slug: "historia", color: "#FFD600", icon: Landmark, solved: 187, total: 420, mastery: 45 },
-      { name: "Geografia", slug: "geografia", color: "#26A69A", icon: Globe, solved: 134, total: 380, mastery: 35 },
-      { name: "Filosofia", slug: "filosofia", color: "#AB47BC", icon: Brain, solved: 89, total: 260, mastery: 34 },
-      { name: "Sociologia", slug: "sociologia", color: "#EF5350", icon: Users, solved: 62, total: 240, mastery: 26 },
+      { name: "História", slug: "historia", color: "#FFD600", icon: Landmark, solved: 0, total: 420, mastery: 0 },
+      { name: "Geografia", slug: "geografia", color: "#26A69A", icon: Globe, solved: 0, total: 380, mastery: 0 },
+      { name: "Filosofia", slug: "filosofia", color: "#AB47BC", icon: Brain, solved: 0, total: 260, mastery: 0 },
+      { name: "Sociologia", slug: "sociologia", color: "#EF5350", icon: Users, solved: 0, total: 240, mastery: 0 },
     ],
   },
   {
     name: "Linguagens",
     subjects: [
-      { name: "Língua Portuguesa", slug: "portugues", color: "#FF9100", icon: BookOpen, solved: 213, total: 500, mastery: 43 },
-      { name: "Redação", slug: "redacao", color: "#FF7043", icon: PenTool, solved: 28, total: 100, mastery: 28 },
-      { name: "Língua Inglesa", slug: "ingles", color: "#42A5F5", icon: Languages, solved: 95, total: 200, mastery: 48 },
+      { name: "Língua Portuguesa", slug: "portugues", color: "#FF9100", icon: BookOpen, solved: 0, total: 500, mastery: 0 },
+      { name: "Redação", slug: "redacao", color: "#FF7043", icon: PenTool, solved: 0, total: 100, mastery: 0 },
+      { name: "Língua Inglesa", slug: "ingles", color: "#42A5F5", icon: Languages, solved: 0, total: 200, mastery: 0 },
     ],
   },
   {
     name: "Ciências da Natureza",
     subjects: [
-      { name: "Física", slug: "fisica", color: "#00D4FF", icon: Atom, solved: 156, total: 450, mastery: 35 },
-      { name: "Química", slug: "quimica", color: "#FF6584", icon: FlaskConical, solved: 178, total: 400, mastery: 45 },
-      { name: "Biologia", slug: "biologia", color: "#00E676", icon: Dna, solved: 201, total: 480, mastery: 42 },
+      { name: "Física", slug: "fisica", color: "#00D4FF", icon: Atom, solved: 0, total: 450, mastery: 0 },
+      { name: "Química", slug: "quimica", color: "#FF6584", icon: FlaskConical, solved: 0, total: 400, mastery: 0 },
+      { name: "Biologia", slug: "biologia", color: "#00E676", icon: Dna, solved: 0, total: 480, mastery: 0 },
     ],
   },
   {
     name: "Matemática",
     subjects: [
-      { name: "Matemática", slug: "matematica", color: "#6C63FF", icon: Calculator, solved: 312, total: 600, mastery: 52 },
+      { name: "Matemática", slug: "matematica", color: "#6C63FF", icon: Calculator, solved: 0, total: 600, mastery: 0 },
     ],
   },
 ];

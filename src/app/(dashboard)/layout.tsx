@@ -12,15 +12,15 @@ import { cn } from "@/lib/utils";
 // Mock user for demo (replace with real auth)
 const MOCK_USER = {
   id: "demo-user-1",
-  name: "Estudante UFRGS",
+  name: "Estudante",
   email: "estudante@email.com",
   image: null,
-  xp: 2450,
-  level: 7,
-  streak: 5,
-  bestStreak: 12,
-  streakShields: 1,
-  lastStudyDate: new Date().toISOString(),
+  xp: 0,
+  level: 1,
+  streak: 0,
+  bestStreak: 0,
+  streakShields: 0,
+  lastStudyDate: null,
   targetExam: "ENEM",
   examDate: "2026-11-08",
 };

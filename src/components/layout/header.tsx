@@ -45,7 +45,7 @@ export function Header() {
         {/* Notifications */}
         <button className="p-2 rounded-xl text-foreground-muted hover:text-foreground hover:bg-background-elevated transition-all relative">
           <Bell className="w-5 h-5" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-accent-pink" />
+          {/* Notification dot — shown when there are new notifications */}
         </button>
 
         {/* Settings */}

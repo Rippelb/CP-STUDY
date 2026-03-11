@@ -38,7 +38,7 @@ import { cn, formatNumber, getGreeting } from "@/lib/utils";
 const statsCards = [
   {
     label: "Questões Respondidas",
-    value: 1847,
+    value: 0,
     icon: Brain,
     color: "#6C63FF",
     suffix: "",
@@ -46,7 +46,7 @@ const statsCards = [
   },
   {
     label: "Taxa de Acerto",
-    value: 72.4,
+    value: 0,
     icon: Target,
     color: "#00D4FF",
     suffix: "%",
@@ -54,7 +54,7 @@ const statsCards = [
   },
   {
     label: "Horas esta Semana",
-    value: 18.5,
+    value: 0,
     icon: Clock,
     color: "#FF6584",
     suffix: "h",
@@ -62,7 +62,7 @@ const statsCards = [
   },
   {
     label: "Streak Atual",
-    value: 23,
+    value: 0,
     icon: Flame,
     color: "#FF9100",
     suffix: " dias",
@@ -71,13 +71,13 @@ const statsCards = [
 ] as const;
 
 const radarData = [
-  { subject: "Matemática", score: 82, fullMark: 100 },
-  { subject: "Física", score: 68, fullMark: 100 },
-  { subject: "Química", score: 74, fullMark: 100 },
-  { subject: "Biologia", score: 85, fullMark: 100 },
-  { subject: "Português", score: 91, fullMark: 100 },
-  { subject: "História", score: 77, fullMark: 100 },
-  { subject: "Geografia", score: 70, fullMark: 100 },
+  { subject: "Matemática", score: 0, fullMark: 100 },
+  { subject: "Física", score: 0, fullMark: 100 },
+  { subject: "Química", score: 0, fullMark: 100 },
+  { subject: "Biologia", score: 0, fullMark: 100 },
+  { subject: "Português", score: 0, fullMark: 100 },
+  { subject: "História", score: 0, fullMark: 100 },
+  { subject: "Geografia", score: 0, fullMark: 100 },
 ];
 
 const questionOfTheDay = {
@@ -96,61 +96,27 @@ const questionOfTheDay = {
 };
 
 const weeklyGoals = [
-  { label: "Questões de Matemática", current: 45, target: 60, color: "#6C63FF" },
-  { label: "Redações escritas", current: 2, target: 3, color: "#FF6584" },
-  { label: "Simulados completos", current: 1, target: 2, color: "#00D4FF" },
-  { label: "Revisões de erros", current: 28, target: 40, color: "#FF9100" },
+  { label: "Questões de Matemática", current: 0, target: 60, color: "#6C63FF" },
+  { label: "Redações escritas", current: 0, target: 3, color: "#FF6584" },
+  { label: "Simulados completos", current: 0, target: 2, color: "#00D4FF" },
+  { label: "Revisões de erros", current: 0, target: 40, color: "#FF9100" },
 ];
 
-const recentActivities = [
-  {
-    id: 1,
-    type: "correct" as const,
-    subject: "Matemática",
-    description: "Acertou questão de Geometria Analítica",
-    xp: 35,
-    time: "5 min atrás",
-  },
-  {
-    id: 2,
-    type: "wrong" as const,
-    subject: "Química",
-    description: "Errou questão de Estequiometria",
-    xp: 0,
-    time: "12 min atrás",
-  },
-  {
-    id: 3,
-    type: "correct" as const,
-    subject: "Português",
-    description: "Acertou questão de Interpretação de Texto",
-    xp: 20,
-    time: "25 min atrás",
-  },
-  {
-    id: 4,
-    type: "streak" as const,
-    subject: "Geral",
-    description: "Alcançou combo de 5 acertos seguidos!",
-    xp: 50,
-    time: "30 min atrás",
-  },
-  {
-    id: 5,
-    type: "correct" as const,
-    subject: "Biologia",
-    description: "Acertou questão de Genética Mendeliana",
-    xp: 20,
-    time: "42 min atrás",
-  },
-];
+const recentActivities: Array<{
+  id: number;
+  type: "correct" | "wrong" | "streak";
+  subject: string;
+  description: string;
+  xp: number;
+  time: string;
+}> = [];
 
 const leaderboard = [
-  { rank: 1, name: "Lucas M.", xp: 48520, avatar: "LM", level: 11 },
-  { rank: 2, name: "Ana Clara S.", xp: 45100, avatar: "AC", level: 10 },
-  { rank: 3, name: "Gabriel R.", xp: 42780, avatar: "GR", level: 10 },
-  { rank: 4, name: "Mariana F.", xp: 39200, avatar: "MF", level: 9 },
-  { rank: 5, name: "Pedro H.", xp: 37650, avatar: "PH", level: 9 },
+  { rank: 1, name: "Maria S.", xp: 15420, avatar: "MS", level: 12 },
+  { rank: 2, name: "João S.", xp: 12890, avatar: "JS", level: 11 },
+  { rank: 3, name: "Ana C.", xp: 11200, avatar: "AC", level: 10 },
+  { rank: 4, name: "Pedro O.", xp: 9800, avatar: "PO", level: 9 },
+  { rank: 5, name: "Lucas F.", xp: 8500, avatar: "LF", level: 8 },
 ];
 
 // ---------------------------------------------------------------------------
@@ -217,7 +183,9 @@ export default function DashboardPage() {
           </span>
         </h1>
         <p className="mt-1 text-sm text-foreground-muted font-body">
-          Continue assim! Sua consistência está fazendo a diferença.
+          {(user?.xp ?? 0) > 0
+            ? "Continue assim! Sua consistência está fazendo a diferença."
+            : "Comece seus estudos agora e acompanhe seu progresso aqui!"}
         </p>
       </motion.div>
 
@@ -452,46 +420,55 @@ export default function DashboardPage() {
             </div>
 
             <div className="space-y-3">
-              {recentActivities.map((activity) => (
-                <div
-                  key={activity.id}
-                  className="flex items-start gap-3 p-2.5 rounded-lg bg-background-elevated/40 border border-border/50"
-                >
-                  <div className="mt-0.5">{getActivityIcon(activity.type)}</div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-body text-foreground leading-snug truncate">
-                      {activity.description}
-                    </p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Badge
-                        variant="custom"
-                        color={
-                          activity.subject === "Matemática"
-                            ? "#6C63FF"
-                            : activity.subject === "Química"
-                              ? "#FF6584"
-                              : activity.subject === "Português"
-                                ? "#FF9100"
-                                : activity.subject === "Biologia"
-                                  ? "#00E676"
-                                  : "#6C63FF"
-                        }
-                        size="sm"
-                      >
-                        {activity.subject}
-                      </Badge>
-                      <span className="text-[10px] text-foreground-muted font-body">
-                        {activity.time}
-                      </span>
-                    </div>
-                  </div>
-                  {activity.xp > 0 && (
-                    <span className="text-xs font-mono text-green-400 whitespace-nowrap">
-                      +{activity.xp} XP
-                    </span>
-                  )}
+              {recentActivities.length === 0 ? (
+                <div className="text-center py-6">
+                  <BookOpen className="w-8 h-8 text-foreground-muted/40 mx-auto mb-2" />
+                  <p className="text-xs text-foreground-muted font-body">
+                    Nenhuma atividade ainda. Comece a praticar!
+                  </p>
                 </div>
-              ))}
+              ) : (
+                recentActivities.map((activity) => (
+                  <div
+                    key={activity.id}
+                    className="flex items-start gap-3 p-2.5 rounded-lg bg-background-elevated/40 border border-border/50"
+                  >
+                    <div className="mt-0.5">{getActivityIcon(activity.type)}</div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-body text-foreground leading-snug truncate">
+                        {activity.description}
+                      </p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Badge
+                          variant="custom"
+                          color={
+                            activity.subject === "Matemática"
+                              ? "#6C63FF"
+                              : activity.subject === "Química"
+                                ? "#FF6584"
+                                : activity.subject === "Português"
+                                  ? "#FF9100"
+                                  : activity.subject === "Biologia"
+                                    ? "#00E676"
+                                    : "#6C63FF"
+                          }
+                          size="sm"
+                        >
+                          {activity.subject}
+                        </Badge>
+                        <span className="text-[10px] text-foreground-muted font-body">
+                          {activity.time}
+                        </span>
+                      </div>
+                    </div>
+                    {activity.xp > 0 && (
+                      <span className="text-xs font-mono text-green-400 whitespace-nowrap">
+                        +{activity.xp} XP
+                      </span>
+                    )}
+                  </div>
+                ))
+              )}
             </div>
           </GlassCard>
         </motion.div>

@@ -25,7 +25,7 @@ const mockUsers: LeaderboardUser[] = [
   { id: "4", name: "Pedro Oliveira", image: null, xp: 9800, level: 9, streak: 15, questionsAnswered: 750, accuracy: 79 },
   { id: "5", name: "Lucas Ferreira", image: null, xp: 8500, level: 8, streak: 20, questionsAnswered: 680, accuracy: 81 },
   { id: "6", name: "Beatriz Lima", image: null, xp: 7200, level: 8, streak: 12, questionsAnswered: 560, accuracy: 78 },
-  { id: "demo-user-1", name: "Você (Estudante UFRGS)", image: null, xp: 2450, level: 7, streak: 5, questionsAnswered: 245, accuracy: 73 },
+  { id: "demo-user-1", name: "Você (Estudante)", image: null, xp: 0, level: 1, streak: 0, questionsAnswered: 0, accuracy: 0 },
   { id: "7", name: "Gabriel Souza", image: null, xp: 6100, level: 7, streak: 8, questionsAnswered: 490, accuracy: 76 },
   { id: "8", name: "Juliana Martins", image: null, xp: 5400, level: 7, streak: 10, questionsAnswered: 420, accuracy: 80 },
   { id: "9", name: "Rafael Almeida", image: null, xp: 4800, level: 6, streak: 6, questionsAnswered: 380, accuracy: 74 },

@@ -309,7 +309,7 @@ export default function Home() {
               Entrar
             </Link>
             <Link
-              href="/register"
+              href="/dashboard"
               className="text-sm font-medium bg-accent-purple hover:bg-accent-purple/90 text-white px-5 py-2 rounded-xl transition-all hover:shadow-glow-purple"
             >
               Começar Grátis
@@ -405,7 +405,7 @@ export default function Home() {
               className="flex flex-col sm:flex-row items-center justify-center gap-4"
             >
               <Link
-                href="/register"
+                href="/dashboard"
                 className="group relative inline-flex items-center gap-2 bg-accent-purple text-white font-display font-semibold text-lg px-8 py-4 rounded-2xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(108,99,255,0.5)] hover:scale-105"
               >
                 <span>Começar Agora</span>
@@ -415,7 +415,7 @@ export default function Home() {
               </Link>
 
               <Link
-                href="/demo"
+                href="/dashboard"
                 className="group inline-flex items-center gap-2 glass glass-hover text-foreground font-display font-semibold text-lg px-8 py-4 rounded-2xl transition-all duration-300 hover:scale-105"
               >
                 <GraduationCap className="w-5 h-5 text-accent-cyan" />
@@ -755,7 +755,7 @@ export default function Home() {
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Link
-              href="/register"
+              href="/dashboard"
               className="group relative inline-flex items-center gap-2 bg-gradient-to-r from-accent-purple to-accent-cyan text-white font-display font-semibold text-lg px-10 py-4 rounded-2xl transition-all duration-300 hover:shadow-[0_0_50px_rgba(108,99,255,0.4)] hover:scale-105"
             >
               <Zap className="w-5 h-5" />

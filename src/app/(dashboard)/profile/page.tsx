@@ -34,24 +34,17 @@ export default function ProfilePage() {
   const levelProgress = user ? xpForNextLevel(user.xp) : null;
 
   const stats = [
-    { label: "Questões Resolvidas", value: 245, icon: Target, color: "#6C63FF" },
-    { label: "Taxa de Acerto", value: 73, suffix: "%", icon: TrendingUp, color: "#00E676" },
-    { label: "Horas Estudadas", value: 48, icon: Clock, color: "#00D4FF" },
+    { label: "Questões Resolvidas", value: 0, icon: Target, color: "#6C63FF" },
+    { label: "Taxa de Acerto", value: 0, suffix: "%", icon: TrendingUp, color: "#00E676" },
+    { label: "Horas Estudadas", value: 0, icon: Clock, color: "#00D4FF" },
     { label: "Streak Atual", value: user?.streak ?? 0, suffix: " dias", icon: Flame, color: "#FF9100" },
     { label: "Melhor Streak", value: user?.bestStreak ?? 0, suffix: " dias", icon: Shield, color: "#FFD600" },
-    { label: "Conquistas", value: 8, suffix: "/30", icon: Trophy, color: "#FF6584" },
+    { label: "Conquistas", value: 0, suffix: "/30", icon: Trophy, color: "#FF6584" },
     { label: "XP Total", value: user?.xp ?? 0, icon: Zap, color: "#6C63FF" },
-    { label: "Matérias Estudadas", value: 9, suffix: "/12", icon: BookOpen, color: "#AB47BC" },
+    { label: "Matérias Estudadas", value: 0, suffix: "/12", icon: BookOpen, color: "#AB47BC" },
   ];
 
-  const recentActivity = [
-    { action: "Respondeu 15 questões de Matemática", time: "Há 2 horas", xp: "+150 XP" },
-    { action: "Completou sessão de Física", time: "Há 5 horas", xp: "+80 XP" },
-    { action: "Desbloqueou conquista 'Centenário'", time: "Ontem", xp: "+300 XP" },
-    { action: "Estudou Biologia por 1h30", time: "Ontem", xp: "+120 XP" },
-    { action: "Completou revisão de erros", time: "2 dias atrás", xp: "+90 XP" },
-    { action: "Streak de 5 dias!", time: "Hoje", xp: "+50 XP" },
-  ];
+  const recentActivity: Array<{ action: string; time: string; xp: string }> = [];
 
   return (
     <div className="space-y-6">
@@ -177,27 +170,39 @@ export default function ProfilePage() {
       {/* Activity Tab */}
       {activeTab === "activity" && (
         <div className="space-y-3">
-          {recentActivity.map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.05 }}
-            >
-              <GlassCard className="!py-3">
-                <div className="flex items-center gap-4">
-                  <div className="w-2 h-2 rounded-full bg-accent-purple" />
-                  <div className="flex-1">
-                    <p className="text-sm">{item.action}</p>
-                    <p className="text-xs text-foreground-muted">{item.time}</p>
+          {recentActivity.length === 0 ? (
+            <GlassCard className="text-center py-8">
+              <Clock className="w-8 h-8 text-foreground-muted/40 mx-auto mb-2" />
+              <p className="text-sm text-foreground-muted">
+                Nenhuma atividade registrada ainda.
+              </p>
+              <p className="text-xs text-foreground-muted/60 mt-1">
+                Comece a estudar para ver seu histórico aqui!
+              </p>
+            </GlassCard>
+          ) : (
+            recentActivity.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.05 }}
+              >
+                <GlassCard className="!py-3">
+                  <div className="flex items-center gap-4">
+                    <div className="w-2 h-2 rounded-full bg-accent-purple" />
+                    <div className="flex-1">
+                      <p className="text-sm">{item.action}</p>
+                      <p className="text-xs text-foreground-muted">{item.time}</p>
+                    </div>
+                    <span className="text-xs font-mono text-accent-purple">
+                      {item.xp}
+                    </span>
                   </div>
-                  <span className="text-xs font-mono text-accent-purple">
-                    {item.xp}
-                  </span>
-                </div>
-              </GlassCard>
-            </motion.div>
-          ))}
+                </GlassCard>
+              </motion.div>
+            ))
+          )}
         </div>
       )}
 
